@@ -2,17 +2,20 @@
 
 [![Version](https://img.shields.io/npm/v/simple-siwe)](https://www.npmjs.com/simple-siwe)
 [![Downloads](https://img.shields.io/npm/dt/simple-siwe)](https://www.npmjs.com/simple-siwe)
+[![install size](https://packagephobia.com/badge?p=simple-siwe@0.0.2)](https://packagephobia.com/result?p=simple-siwe@0.0.2)
+[![bundle size](https://badgen.net/bundlephobia/minzip/simple-siwe)](https://bundlephobia.com/result?p=simple-siwe)
+
 [publint](https://publint.dev/simple-siwe) | 
 [arethetypeswrong](https://arethetypeswrong.github.io/?p=simple-siwe)
 
 
 Simple implementation Sign-In with Ethereum (SIWE) library with Viem v2
 
-- Lightweight
-- Dependency-free, except for viem
-- Tree-shakable
-- Written in TypeScript and supports ESM
-- 100% test coverage
+- 🌱 Lightweight with minified 1.1kb
+- 🚫 Dependency-free, except for viem
+- 🌳 Tree-shakable
+- ✍️ Written in TypeScript
+- ✅ 100% test coverage
 
 ### Installation and Usage
 
