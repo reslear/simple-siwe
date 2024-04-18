@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.0.5
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.4...v0.0.5)
+
+### 🏡 Chore
+
+- Fix build types ([1e745ae](https://github.com/reslear/simple-siwe/commit/1e745ae))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.0.4
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.3...v0.0.4)
