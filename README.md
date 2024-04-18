@@ -1,7 +1,7 @@
 # simple-siwe 
 
-[![Version](https://img.shields.io/npm/v/simple-siwe)](https://www.npmjs.com/simple-siwe/simple-siwe)
-[![Downloads](https://img.shields.io/npm/dt/simple-siwe)](https://www.npmjs.com/simple-siwe/simple-siwe)
+[![Version](https://img.shields.io/npm/v/simple-siwe)](https://www.npmjs.com/simple-siwe)
+[![Downloads](https://img.shields.io/npm/dt/simple-siwe)](https://www.npmjs.com/simple-siwe)
 [publint](https://publint.dev/simple-siwe) | 
 [arethetypeswrong](https://arethetypeswrong.github.io/?p=simple-siwe)
 
@@ -26,11 +26,18 @@ After importing `simple-siwe`, you can use its functions in your TypeScript code
 
 ```typescript
 import { parseMessage, generateNonce, verify, prepareMessage } from 'simple-siwe';
+import type { SiweMessage } from 'simple-siwe';
 
-// Example usage of functions
+// Parse a SIWE message
 const message = parseMessage("Your SIWE message goes here...");
+
+// Generate a nonce
 const nonce = generateNonce();
+
+// Verify a message with a signature
 const isVerified = await verify({ message, signature: "signature-hex-value" });
+
+// Prepare a message for signing
 const preparedMessage = prepareMessage(message);
 ```
 
