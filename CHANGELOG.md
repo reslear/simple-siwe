@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.0.4
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.3...v0.0.4)
+
+### 📖 Documentation
+
+- [skip ci] ([ff4e95a](https://github.com/reslear/simple-siwe/commit/ff4e95a))
+- Fix readme [skip ci] ([f3a6c37](https://github.com/reslear/simple-siwe/commit/f3a6c37))
+
+### 🏡 Chore
+
+- Exclude test files from build ([8725232](https://github.com/reslear/simple-siwe/commit/8725232))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.0.3
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.2...v0.0.3)
