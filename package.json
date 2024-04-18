@@ -27,7 +27,8 @@
   "files": [
     "dist/**",
     "!dist/**/*.tsbuildinfo",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
   ],
   "sideEffects": false,
   "scripts": {
