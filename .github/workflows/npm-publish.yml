@@ -52,3 +52,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx changelogen@latest --release --push --publish
+        
+      - if: "failure()"
+        uses: "andymckay/cancel-action@0.3"
