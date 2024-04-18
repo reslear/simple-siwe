@@ -1,6 +1,6 @@
 {
   "name": "simple-siwe",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple implementation Sign-In with Ethereum (SIWE) library with Viem v2",
   "keywords": [
     "ethereum",
