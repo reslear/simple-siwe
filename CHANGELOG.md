@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.0.6
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.5...v0.0.6)
+
+### 🩹 Fixes
+
+- Correct message verify signature ([adc324f](https://github.com/reslear/simple-siwe/commit/adc324f))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.0.5
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.4...v0.0.5)
