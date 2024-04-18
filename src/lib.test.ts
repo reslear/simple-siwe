@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { describe, expect, it, test } from 'vitest'
 import { zeroAddress } from 'viem'
 import { generateNonce, parseMessage, prepareMessage, verify } from './lib.js'
 import type { SiweMessage } from './types.js'
@@ -44,31 +44,30 @@ test('verify message', async () => {
     message: message,
   })
 
-  const parsedMessage = parseMessage(message)
-
   expect(
     await verify({
-      message: parsedMessage,
+      message,
       signature: signature,
     })
-  ).toBeFalsy()
+  ).toBeTruthy()
 })
 
-test('prepare message', () => {
-  const data = {
-    domain: 'example.com',
-    address: zeroAddress,
-    uri: 'https://example.com',
-    version: '1',
-    nonce: '123',
-    issuedAt: new Date().toISOString(),
-    statement: 'I accept the Terms of Service: https://example.com/tos ',
-  } as SiweMessage
+describe('prepare message', () => {
+  it('should prepare a message with a statement', () => {
+    const data = {
+      domain: 'example.com',
+      address: zeroAddress,
+      uri: 'https://example.com',
+      version: '1',
+      nonce: '123',
+      issuedAt: new Date().toISOString(),
+      statement: 'I accept the Terms of Service: https://example.com/tos ',
+    } as SiweMessage
 
-  const message = prepareMessage(data)
+    const message = prepareMessage(data)
 
-  expect(message).toMatchInlineSnapshot(
-    `"${data.domain} wants you to sign in with your Ethereum account:
+    expect(message).toMatchInlineSnapshot(
+      `"${data.domain} wants you to sign in with your Ethereum account:
 ${data.address}
 
 ${data.statement}
@@ -78,5 +77,31 @@ Version: ${data.version}
 Chain ID: 1
 Nonce: ${data.nonce}
 Issued At: ${data.issuedAt}"`
-  )
+    )
+  })
+
+  it('should prepare a message without a statement', () => {
+    const data2 = {
+      domain: 'example.com',
+      address: zeroAddress,
+      uri: 'https://example.com',
+      version: '1',
+      issuedAt: new Date().toISOString(),
+    } as SiweMessage
+
+    const message2 = prepareMessage(data2)
+
+    expect(message2).toMatchInlineSnapshot(
+      `"${data2.domain} wants you to sign in with your Ethereum account:
+${data2.address}
+
+Login to ${data2.domain}
+
+URI: ${data2.uri}
+Version: ${data2.version}
+Chain ID: 1
+Nonce: ${data2.nonce}
+Issued At: ${data2.issuedAt}"`
+    )
+  })
 })

@@ -1,14 +1,43 @@
-import { recoverMessageAddress, getAddress } from 'viem'
+import { recoverMessageAddress, getAddress, isHex, toHex } from 'viem'
 import type { Hex } from 'viem'
 import type { SiweMessage } from './types.js'
 
-export function parseMessage(message: string) {
+export function parseMessage(message: string): SiweMessage {
   const lines = message.split('\n')
+  const domain = lines[0]
   const address = getAddress(lines[1].trim())
+  const uri = lines[2]
+
+  const versionRegex = /Version:\s*(\S+)/
+  const versionMatch = message.match(versionRegex)
+  const version = versionMatch ? versionMatch[1] : ''
+
+  const chainIdRegex = /Chain\s*ID:\s*(\d+)/
+  const chainIdMatch = message.match(chainIdRegex)
+  const chainId = chainIdMatch ? parseInt(chainIdMatch[1]) : 1
+
+  const nonceRegex = /Nonce:\s*(\S+)/
+  const nonceMatch = message.match(nonceRegex)
+  const nonce = nonceMatch ? nonceMatch[1] : ''
+
+  const issuedAtRegex = /Issued\s*At:\s*(\S+)/
+  const issuedAtMatch = message.match(issuedAtRegex)
+  const issuedAt = issuedAtMatch ? issuedAtMatch[1] : ''
+
+  const statementRegex = /(?:\n{2})([\s\S]+)/
+  const statementMatch = message.match(statementRegex)
+  const statement = statementMatch ? statementMatch[1] : ''
 
   return {
+    domain,
     address,
-  } as SiweMessage
+    statement,
+    uri,
+    version,
+    chainId,
+    nonce,
+    issuedAt,
+  }
 }
 
 export function generateNonce() {
@@ -25,19 +54,24 @@ export async function verify({
   message,
   signature,
 }: {
-  message: SiweMessage
-  signature: Hex
+  message: string
+  signature: string | Hex
 }) {
-  const preparedMessage = prepareMessage(message)
+  const { address } = parseMessage(message)
 
   const recoveredAddress = await recoverMessageAddress({
-    message: preparedMessage,
-    signature,
+    message,
+    signature: isHex(signature) ? signature : toHex(signature),
   })
 
-  return recoveredAddress === message.address
+  return recoveredAddress === address
 }
 
+/**
+ * Prepares a message for signing.
+ * @param message The message to be prepared.
+ * @returns The prepared message.
+ */
 export function prepareMessage(message: SiweMessage) {
   const header = `${message.domain} wants you to sign in with your Ethereum account:`
   const uriField = `URI: ${message.uri}`
@@ -46,24 +80,15 @@ export function prepareMessage(message: SiweMessage) {
 
   const chainField = `Chain ID: ` + (message.chainId || '1')
 
-  let nonceField
-
-  if (message.nonce) {
-    nonceField = `Nonce: ${message.nonce}`
-  } else {
-    nonceField = `Nonce: ${generateNonce()}`
-  }
-
-  let issuedAt
-  if (message.issuedAt) {
-    issuedAt = message.issuedAt
-  } else {
-    issuedAt = new Date().toISOString()
-  }
+  const nonceField = message.nonce
+    ? `Nonce: ${message.nonce}`
+    : `Nonce: ${generateNonce()}`
+  const issuedAt = message.issuedAt ?? new Date().toISOString()
 
   const suffixArray = [uriField, versionField, chainField, nonceField]
 
   suffixArray.push(`Issued At: ${issuedAt}`)
+
   let statement
   if (message.statement) {
     statement = message.statement
