@@ -12,7 +12,7 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      'packagename': resolve('../src/index.ts'),
+      'simple-siwe': resolve('../src/index.ts'),
     },
   },
 

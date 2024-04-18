@@ -1,16 +1,20 @@
 {
-  "name": "packagename",
+  "name": "simple-siwe",
   "version": "0.0.1",
-  "description": "description",
+  "description": "Simple implementation Sign-In with Ethereum (SIWE) library with Viem v2",
   "keywords": [
-    "keyword"
+    "ethereum",
+    "sign-in",
+    "sign-in-with-ethereum",
+    "siwe",
+    "viem2"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/github_author/packagename.git"
+    "url": "https://github.com/reslear/simple-siwe.git"
   },
   "license": "MIT",
-  "author": "username",
+  "author": "reslear",
   "type": "module",
   "exports": {
     ".": {
@@ -30,11 +34,13 @@
     "build": "pnpm run clean && pnpm run build:esm+types",
     "build:esm+types": "tsc --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "typescript": ">=5.0.4"
+    "typescript": ">=5.0.4",
+    "viem": "2.x"
   },
   "peerDependenciesMeta": {
     "typescript": {
@@ -42,8 +48,11 @@
     }
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.5.0",
+    "@vitest/ui": "^1.5.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
   },
   "publishConfig": {
     "access": "public"
