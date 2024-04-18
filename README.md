@@ -10,7 +10,7 @@
 [arethetypeswrong](https://arethetypeswrong.github.io/?p=simple-siwe)
 
 
-Simple implementation Sign-In with Ethereum (SIWE) library with [Viem v2](https://viem.sh/)
+Simple implementation Sign-In with Ethereum (SIWE) [eip-4361](https://eips.ethereum.org/EIPS/eip-4361) library with [Viem v2](https://viem.sh/)
 
 - 🌱 Lightweight, minified ~1kb
 - 🚫 Dependency-free
@@ -45,8 +45,9 @@ const isVerified = await verify({ message, signature: "signature-hex-value" });
 const preparedMessage = prepareMessage(message);
 ```
 
-You can use these functions to parse SIWE messages, generate nonces, verify message integrity with signatures, and prepare SIWE messages for signing.
+### Generating a nonce
 
+The nonce is generated using the [Crypto: randomUUID() method](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID), which may not be supported in all browsers or Node.js versions. Consider using polyfills to ensure compatibility.
 
 ## Related
 - https://github.com/spruceid/siwe
