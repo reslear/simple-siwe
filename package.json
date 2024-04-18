@@ -34,7 +34,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "pnpm run clean && pnpm run build:esm+types",
-    "build:esm+types": "tsc --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types",
+    "build:esm+types": "tsc --project tsconfig.build.json --outDir ./dist/esm --declaration --declarationMap --declarationDir ./dist/types",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "prepublishOnly": "pnpm build",
     "test": "vitest",
