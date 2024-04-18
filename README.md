@@ -37,9 +37,6 @@ const preparedMessage = prepareMessage(message);
 You can use these functions to parse SIWE messages, generate nonces, verify message integrity with signatures, and prepare SIWE messages for signing.
 
 
-## Uses source links
-- 
-
 ## Related
 - https://github.com/spruceid/siwe
 - https://www.npmjs.com/package/eip-login
