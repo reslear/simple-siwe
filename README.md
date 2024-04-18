@@ -2,27 +2,28 @@
 
 [![Version](https://img.shields.io/npm/v/simple-siwe)](https://www.npmjs.com/simple-siwe)
 [![Downloads](https://img.shields.io/npm/dt/simple-siwe)](https://www.npmjs.com/simple-siwe)
-[![install size](https://packagephobia.com/badge?p=simple-siwe@0.0.2)](https://packagephobia.com/result?p=simple-siwe@0.0.2)
-[![bundle size](https://badgen.net/bundlephobia/minzip/simple-siwe)](https://bundlephobia.com/result?p=simple-siwe)
+[![install size](https://packagephobia.com/badge?p=simple-siwe)](https://packagephobia.com/result?p=simple-siwe)
+![npm bundle size](https://img.shields.io/bundlephobia/min/simple-siwe)
+
 
 [publint](https://publint.dev/simple-siwe) | 
 [arethetypeswrong](https://arethetypeswrong.github.io/?p=simple-siwe)
 
 
-Simple implementation Sign-In with Ethereum (SIWE) library with Viem v2
+Simple implementation Sign-In with Ethereum (SIWE) library with [Viem v2](https://viem.sh/)
 
-- 🌱 Lightweight with minified 1.1kb
-- 🚫 Dependency-free, except for viem
+- 🌱 Lightweight, minified ~1kb
+- 🚫 Dependency-free
 - 🌳 Tree-shakable
 - ✍️ Written in TypeScript
 - ✅ 100% test coverage
 
 ### Installation and Usage
 
-You can install **simple-siwe** using npm, yarn, or pnpm. Here's how you can install it using pnpm:
+You can install **simple-siwe** and **viem** using npm, yarn, or pnpm. Here's how you can install it using pnpm:
 
 ```bash
-pnpm add simple-siwe
+pnpm add simple-siwe viem
 ```
 
 After importing `simple-siwe`, you can use its functions in your TypeScript code. Here's a basic example of how you can use the functions:
