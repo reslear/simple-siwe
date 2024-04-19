@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.0
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.6...v0.1.0)
+
+### 🩹 Fixes
+
+- ⚠️  No extra parseMessage, insensitive address checks ([4a8161c](https://github.com/reslear/simple-siwe/commit/4a8161c))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  No extra parseMessage, insensitive address checks ([4a8161c](https://github.com/reslear/simple-siwe/commit/4a8161c))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.0.6
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.5...v0.0.6)
