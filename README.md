@@ -34,9 +34,14 @@ import type { SiweMessage } from 'simple-siwe'
 
 // Prepare a message for signing
 const message = prepareMessage({
-  nonce: "0x...",
-  redirect: "https://example.com",
-  timestamp: Date.now(),
+  domain: "example.com", // RFC 4501 dns authority that is requesting the signing
+  address: "0x1234567890123456789012345678901234567890", // Ethereum address performing the signing
+  statement: "This is a sample statement for signing.", // Human-readable ASCII assertion
+  uri: "https://example.com/resource", // RFC 3986 URI referring to the resource
+  version: "1.0", // Current version of the message
+  chainId: 1, // EIP-155 Chain ID
+  nonce: "0xABCDEF123456", // Randomized token used to prevent replay attacks
+  issuedAt: new Date().toISOString() // ISO 8601 datetime string of the current time
 })
 
 // Verify a message with a signature
@@ -46,14 +51,11 @@ const isVerified = await verify({ message, signature: "0x..." })
 const nonce = generateNonce()
 ```
 
-### Generating a nonce
-
-The nonce is generated using the [Crypto: randomUUID() method](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID), which may not be supported in all browsers or Node.js versions. Consider using polyfills to ensure compatibility.
-
-
 ### Backend & Frontend Implementation
 
-Express.js example:
+Express.js example with a simple frontend implementation.
+
+#### Backend side with 
 
 ```ts
 import express from 'express'
@@ -70,12 +72,12 @@ app.post('/verify', async (req, res) => {
   const { message, signature } = req.body
 
   try {
-    await verify({ message, signature })
+    const isValid = await verify({ message, signature })
 
     // save session logic here
-    res.send({ message: 'Signature verified' })
+    res.send({ isValid })
   } catch (error) {
-    res.status(400).send({ error: error.message })
+    res.status(400).send({ isValid: false, error: error.message })
   }
 
 })
@@ -83,20 +85,54 @@ app.post('/verify', async (req, res) => {
 app.listen(3000)
 ```
 
-Frontend example:
+#### Frontend side:
 
 ```ts
 import { generateNonce, prepareMessage, verify } from 'simple-siwe'
 
-const nonce = await fetch('http://localhost:3000/nonce').then(res => res.json())
-const message = prepareMessage({ nonce, redirect: 'https://example.com', timestamp: Date.now() })
+// 1. Fetch nonce from the backend and prepare a message
+const { nonce } = await fetch('http://localhost:3000/nonce').then(res => res.json())
+
+// 2. Prepare a message with the nonce
+const message = prepareMessage({ 
+  // ... message properties
+  nonce,
+})
+const preparedMessage = prepareMessage(message)
+
+// 3. Sign the message using wagmi or other signing methods
+const signature = await signMessage({ message })
+
+// 4. Verify the signature on the backend
+try {
+  const { isValid } = await fetch('http://localhost:3000/verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, signature }),
+  }).then((res) => res.json())
+
+  // 5. Done. Use the isValid boolean to determine if the signature is valid
+
+  if (isValid) {
+    // redirect to the dashboard
+  } else {
+    // show an error message
+  }
+
+} catch (error) {
+  console.error(error)
+}
+
 ```
 
-### Frontend Implementation
 
-```ts
-import { generateNonce, prepareMessage, verify } from 'simple-siwe'
-```
+## Troubleshooting
+
+### `TypeError: Crypto.randomUUID is not a function`
+
+The nonce is generated using the [Crypto: randomUUID() method](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID), which may not be supported in all browsers or Node.js versions. Consider using polyfills to ensure compatibility.
+
+
 
 ## Related
 - https://github.com/spruceid/siwe
