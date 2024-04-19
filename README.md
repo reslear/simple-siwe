@@ -30,7 +30,6 @@ After importing `simple-siwe`, you can use its functions in your TypeScript code
 
 ```typescript
 import { parseMessage, generateNonce, verify, prepareMessage } from 'simple-siwe'
-import type { SiweMessage } from 'simple-siwe'
 
 // Prepare a message for signing
 const message = prepareMessage({
@@ -89,19 +88,21 @@ app.listen(3000)
 
 ```ts
 import { generateNonce, prepareMessage, verify } from 'simple-siwe'
+import type { SiweMessage } from 'simple-siwe'
 
 // 1. Fetch nonce from the backend and prepare a message
 const { nonce } = await fetch('http://localhost:3000/nonce').then(res => res.json())
 
 // 2. Prepare a message with the nonce
-const message = prepareMessage({ 
+const message: SiweMessage = { 
   // ... message properties
   nonce,
-})
+}
+
 const preparedMessage = prepareMessage(message)
 
 // 3. Sign the message using wagmi or other signing methods
-const signature = await signMessage({ message })
+const signature = await signMessage({ message: preparedMessage })
 
 // 4. Verify the signature on the backend
 try {
