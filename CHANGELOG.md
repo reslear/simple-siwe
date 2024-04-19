@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.1
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.1.0...v0.1.1)
+
+### 📖 Documentation
+
+- Update README.md with backend and frontend implementation examples ([6b395c7](https://github.com/reslear/simple-siwe/commit/6b395c7))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.1.0
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.0.6...v0.1.0)
