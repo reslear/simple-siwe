@@ -1,55 +1,68 @@
-import { describe, expect, it, test } from 'vitest'
-import { zeroAddress } from 'viem'
-import { generateNonce, parseMessage, prepareMessage, verify } from './lib.js'
+import { assert, describe, expect, it, test, vi } from 'vitest'
 import type { SiweMessage } from './types.js'
+import { InvalidAddressError, zeroAddress } from 'viem'
+import { prepareMessage, verify } from './lib.js'
 import { privateKeyToAccount } from 'viem/accounts'
+import { generateNonce } from './utils.js'
 
-test('parse message', () => {
-  const data = {
-    domain: 'example.com',
-    address: zeroAddress,
-    uri: 'https://example.com',
-    version: '1',
-    chainId: 1,
-    nonce: '123',
-    issuedAt: new Date().toISOString(),
-  } as SiweMessage
+vi.mock('./utils.js', () => ({
+  generateNonce: vi.fn(),
+}))
 
-  const message = prepareMessage(data)
-  const parsedMessage = parseMessage(message)
-
-  expect(parsedMessage.address).toBe(data.address)
-})
-
-test('should generate a nonce of at least 8 characters', () => {
-  const nonce = generateNonce()
-  expect(nonce.length).toBeGreaterThanOrEqual(8)
-})
-
-test('verify message', async () => {
-  const message = prepareMessage({
+describe('verify message', () => {
+  const message = {
     domain: 'example.com',
     address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
     uri: 'https://example.com',
     version: '1',
     chainId: 1,
     nonce: '123',
-    issuedAt: new Date().toISOString(),
-  })
+    issuedAt: '2024-04-19T00:46:43Z',
+  }
 
   const account = privateKeyToAccount(
     '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
   )
-  const signature = await account.signMessage({
-    message: message,
+
+  test('verify message with signature', async () => {
+    const preparedMessage = prepareMessage(message)
+
+    const signature = await account.signMessage({
+      message: preparedMessage,
+    })
+
+    const result = await verify({ message, signature })
+
+    expect(result).toBeTruthy()
   })
 
-  expect(
-    await verify({
-      message,
-      signature: signature,
+  test('verify message with invalid address', async () => {
+    const messageWithInvalidAddress = {
+      ...message,
+      address: '10x',
+    }
+    const preparedMessage = prepareMessage(messageWithInvalidAddress)
+
+    const signature = await account.signMessage({
+      message: preparedMessage,
     })
-  ).toBeTruthy()
+
+    await expect(
+      verify({ message: messageWithInvalidAddress, signature })
+    ).rejects.toThrow(InvalidAddressError)
+  })
+
+  test('verify message with invalid signature', async () => {
+    const preparedMessage = prepareMessage(message)
+
+    const signature = await account.signMessage({
+      message: preparedMessage,
+    })
+
+    await expect(
+      verify({ message, signature: signature.slice(1) })
+    ).rejects.toThrow(/Signature must be a hex string/)
+  })
 })
 
 describe('prepare message', () => {
@@ -60,7 +73,7 @@ describe('prepare message', () => {
       uri: 'https://example.com',
       version: '1',
       nonce: '123',
-      issuedAt: new Date().toISOString(),
+      issuedAt: '2024-04-19T00:46:43Z',
       statement: 'I accept the Terms of Service: https://example.com/tos ',
     } as SiweMessage
 
@@ -81,12 +94,17 @@ Issued At: ${data.issuedAt}"`
   })
 
   it('should prepare a message without a statement', () => {
+    const nonce = 'e4fc0ce5-aa83-4623-b193-98f6d30c9bb1'
+    vi.mocked(generateNonce).mockReturnValue(nonce)
+
+    const date = new Date(2000, 1, 1, 13)
+    vi.setSystemTime(date)
+
     const data2 = {
       domain: 'example.com',
       address: zeroAddress,
       uri: 'https://example.com',
       version: '1',
-      issuedAt: new Date().toISOString(),
     } as SiweMessage
 
     const message2 = prepareMessage(data2)
@@ -100,8 +118,8 @@ Login to ${data2.domain}
 URI: ${data2.uri}
 Version: ${data2.version}
 Chain ID: 1
-Nonce: ${data2.nonce}
-Issued At: ${data2.issuedAt}"`
+Nonce: ${nonce}
+Issued At: ${new Date().toISOString()}"`
     )
   })
 })

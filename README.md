@@ -29,25 +29,74 @@ pnpm add simple-siwe viem
 After importing `simple-siwe`, you can use its functions in your TypeScript code. Here's a basic example of how you can use the functions:
 
 ```typescript
-import { parseMessage, generateNonce, verify, prepareMessage } from 'simple-siwe';
-import type { SiweMessage } from 'simple-siwe';
-
-// Parse a SIWE message
-const message = parseMessage("Your SIWE message goes here...");
-
-// Generate a nonce
-const nonce = generateNonce();
-
-// Verify a message with a signature
-const isVerified = await verify({ message, signature: "signature-hex-value" });
+import { parseMessage, generateNonce, verify, prepareMessage } from 'simple-siwe'
+import type { SiweMessage } from 'simple-siwe'
 
 // Prepare a message for signing
-const preparedMessage = prepareMessage(message);
+const message = prepareMessage({
+  nonce: "0x...",
+  redirect: "https://example.com",
+  timestamp: Date.now(),
+})
+
+// Verify a message with a signature
+const isVerified = await verify({ message, signature: "0x..." })
+
+// Generate a nonce
+const nonce = generateNonce()
 ```
 
 ### Generating a nonce
 
 The nonce is generated using the [Crypto: randomUUID() method](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID), which may not be supported in all browsers or Node.js versions. Consider using polyfills to ensure compatibility.
+
+
+### Backend & Frontend Implementation
+
+Express.js example:
+
+```ts
+import express from 'express'
+import { generateNonce, prepareMessage, verify } from 'simple-siwe'
+
+const app = express()
+
+app.get('/nonce', (req, res) => {
+  const nonce = generateNonce()
+  res.json({ nonce })
+})
+
+app.post('/verify', async (req, res) => {
+  const { message, signature } = req.body
+
+  try {
+    await verify({ message, signature })
+
+    // save session logic here
+    res.send({ message: 'Signature verified' })
+  } catch (error) {
+    res.status(400).send({ error: error.message })
+  }
+
+})
+
+app.listen(3000)
+```
+
+Frontend example:
+
+```ts
+import { generateNonce, prepareMessage, verify } from 'simple-siwe'
+
+const nonce = await fetch('http://localhost:3000/nonce').then(res => res.json())
+const message = prepareMessage({ nonce, redirect: 'https://example.com', timestamp: Date.now() })
+```
+
+### Frontend Implementation
+
+```ts
+import { generateNonce, prepareMessage, verify } from 'simple-siwe'
+```
 
 ## Related
 - https://github.com/spruceid/siwe

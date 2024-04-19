@@ -38,6 +38,7 @@
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "prepublishOnly": "pnpm build",
     "test": "vitest",
+    "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage"
   },
   "peerDependencies": {

@@ -1,48 +1,13 @@
-import { recoverMessageAddress, getAddress, isHex, toHex } from 'viem'
-import type { Hex } from 'viem'
+import {
+  recoverMessageAddress,
+  isHex,
+  isAddressEqual,
+  isAddress,
+  InvalidAddressError,
+} from 'viem'
+import type { Address, Hex } from 'viem'
 import type { SiweMessage } from './types.js'
-
-export function parseMessage(message: string): SiweMessage {
-  const lines = message.split('\n')
-  const domain = lines[0]
-  const address = getAddress(lines[1].trim())
-  const uri = lines[2]
-
-  const versionRegex = /Version:\s*(\S+)/
-  const versionMatch = message.match(versionRegex)
-  const version = versionMatch ? versionMatch[1] : ''
-
-  const chainIdRegex = /Chain\s*ID:\s*(\d+)/
-  const chainIdMatch = message.match(chainIdRegex)
-  const chainId = chainIdMatch ? parseInt(chainIdMatch[1]) : 1
-
-  const nonceRegex = /Nonce:\s*(\S+)/
-  const nonceMatch = message.match(nonceRegex)
-  const nonce = nonceMatch ? nonceMatch[1] : ''
-
-  const issuedAtRegex = /Issued\s*At:\s*(\S+)/
-  const issuedAtMatch = message.match(issuedAtRegex)
-  const issuedAt = issuedAtMatch ? issuedAtMatch[1] : ''
-
-  const statementRegex = /(?:\n{2})([\s\S]+)/
-  const statementMatch = message.match(statementRegex)
-  const statement = statementMatch ? statementMatch[1] : ''
-
-  return {
-    domain,
-    address,
-    statement,
-    uri,
-    version,
-    chainId,
-    nonce,
-    issuedAt,
-  }
-}
-
-export function generateNonce() {
-  return crypto.randomUUID()
-}
+import { generateNonce } from './utils.js'
 
 /**
  * Verifies the integrity of a message using a signature.
@@ -54,17 +19,25 @@ export async function verify({
   message,
   signature,
 }: {
-  message: string
+  message: SiweMessage
   signature: string | Hex
 }) {
-  const { address } = parseMessage(message)
+  const preparedMessage = prepareMessage(message)
+
+  if (!isAddress(message.address)) {
+    throw new InvalidAddressError({ address: message.address })
+  }
+
+  if (!isHex(signature)) {
+    throw new Error('Signature must be a hex string')
+  }
 
   const recoveredAddress = await recoverMessageAddress({
-    message,
-    signature: isHex(signature) ? signature : toHex(signature),
+    message: preparedMessage,
+    signature,
   })
 
-  return recoveredAddress === address
+  return isAddressEqual(recoveredAddress, message.address)
 }
 
 /**
