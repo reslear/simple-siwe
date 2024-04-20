@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.2
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.1.1...v0.1.2)
+
+### 🩹 Fixes
+
+- GenerateNonce as string type ([9cb4f72](https://github.com/reslear/simple-siwe/commit/9cb4f72))
+
+### 📖 Documentation
+
+- Fix import statement in README.md [skip ci] ([e1bab8a](https://github.com/reslear/simple-siwe/commit/e1bab8a))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.1.1
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.1.0...v0.1.1)
