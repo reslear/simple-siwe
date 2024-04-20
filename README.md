@@ -31,6 +31,9 @@ After importing `simple-siwe`, you can use its functions in your TypeScript code
 ```typescript
 import { parseMessage, generateNonce, verify, prepareMessage } from 'simple-siwe'
 
+// Generate a nonce
+const nonce = generateNonce()
+
 // Prepare a message for signing
 const message = prepareMessage({
   domain: "example.com", // RFC 4501 dns authority that is requesting the signing
@@ -39,15 +42,13 @@ const message = prepareMessage({
   uri: "https://example.com/resource", // RFC 3986 URI referring to the resource
   version: "1.0", // Current version of the message
   chainId: 1, // EIP-155 Chain ID
-  nonce: "0xABCDEF123456", // Randomized token used to prevent replay attacks
+  nonce, // Randomized token used to prevent replay attacks
   issuedAt: new Date().toISOString() // ISO 8601 datetime string of the current time
 })
 
 // Verify a message with a signature
 const isVerified = await verify({ message, signature: "0x..." })
 
-// Generate a nonce
-const nonce = generateNonce()
 ```
 
 ### Backend & Frontend Implementation
