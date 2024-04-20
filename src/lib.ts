@@ -46,33 +46,31 @@ export async function verify({
  * @returns The prepared message.
  */
 export function prepareMessage(message: SiweMessage) {
-  const header = `${message.domain} wants you to sign in with your Ethereum account:`
-  const uriField = `URI: ${message.uri}`
-  let prefix = [header, message.address].join('\n')
-  const versionField = `Version: ${message.version}`
+  // Construct the header
+  const header = `${message.domain} wants you to sign in with your Ethereum account:\n`
 
-  const chainField = `Chain ID: ` + (message.chainId || '1')
+  const address = message.address + '\n\n'
 
-  const nonceField = message.nonce
-    ? `Nonce: ${message.nonce}`
-    : `Nonce: ${generateNonce()}`
-  const issuedAt = message.issuedAt ?? new Date().toISOString()
+  // Construct the statement (if provided)
+  const statement = message.statement ? `${message.statement}\n\n` : ''
 
-  const suffixArray = [uriField, versionField, chainField, nonceField]
+  // Construct the body
+  const body = [
+    `URI: ${message.uri}`,
+    `Version: ${message.version}`,
+    `Chain ID: ${message.chainId || '1'}`,
+    `Nonce: ${message.nonce ?? generateNonce()}`,
+    `Issued At: ${message.issuedAt ?? new Date().toISOString()}`,
+    message.expirationTime ? `Expiration Time: ${message.expirationTime}` : '',
+    message.notBefore ? `Not Before: ${message.notBefore}` : '',
+    message.requestId ? `Request ID: ${message.requestId}` : '',
+    message.resources ? `Resources:\n${message.resources.join('\n')}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n')
 
-  suffixArray.push(`Issued At: ${issuedAt}`)
+  // Combine header, statement, and body
+  const result = `${header}${address}${statement}${body}`
 
-  let statement
-  if (message.statement) {
-    statement = message.statement
-  } else {
-    statement = `Login to ${message.domain}`
-  }
-
-  const suffix = suffixArray.join('\n')
-  prefix = [prefix, statement].join('\n\n')
-  if (statement) {
-    prefix += '\n'
-  }
-  return [prefix, suffix].join('\n')
+  return result
 }

@@ -113,8 +113,6 @@ Issued At: ${data.issuedAt}"`
       `"${data2.domain} wants you to sign in with your Ethereum account:
 ${data2.address}
 
-Login to ${data2.domain}
-
 URI: ${data2.uri}
 Version: ${data2.version}
 Chain ID: 1

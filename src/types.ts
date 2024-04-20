@@ -20,4 +20,16 @@ export declare class SiweMessage {
   nonce: string
   /**ISO 8601 datetime string of the current time. */
   issuedAt?: string
+
+  /**ISO 8601 datetime string of the earliest time the message is valid. */
+  expirationTime?: string
+
+  /**ISO 8601 datetime string of the latest time the message is valid. */
+  notBefore?: string
+
+  /**Unique identifier for the request. */
+  requestId?: string
+
+  /**RFC 3986 URI referring to the resource that is the subject of the signing (as in the __subject__ of a claim). */
+  resources?: string[]
 }
