@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.1.3
+
+[compare changes](https://github.com/reslear/simple-siwe/compare/v0.1.2...v0.1.3)
+
+### 💅 Refactors
+
+- Improve parse, complete Message types ([a084c8f](https://github.com/reslear/simple-siwe/commit/a084c8f))
+
+### ❤️ Contributors
+
+- Reslear <reslear@gmail.com>
+
 ## v0.1.2
 
 [compare changes](https://github.com/reslear/simple-siwe/compare/v0.1.1...v0.1.2)
