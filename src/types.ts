@@ -1,4 +1,6 @@
 export declare class SiweMessage {
+  /**RFC 3986 URI scheme for the authority that is requesting the signing. */
+  scheme?: string
   /**RFC 4501 dns authority that is requesting the signing. */
   domain: string
   /**Ethereum address performing the signing conformant to capitalization
@@ -20,16 +22,17 @@ export declare class SiweMessage {
   nonce: string
   /**ISO 8601 datetime string of the current time. */
   issuedAt?: string
-
-  /**ISO 8601 datetime string of the earliest time the message is valid. */
+  /**ISO 8601 datetime string that, if present, indicates when the signed
+   * authentication message is no longer valid. */
   expirationTime?: string
-
-  /**ISO 8601 datetime string of the latest time the message is valid. */
+  /**ISO 8601 datetime string that, if present, indicates when the signed
+   * authentication message will become valid. */
   notBefore?: string
-
-  /**Unique identifier for the request. */
+  /**System-specific identifier that may be used to uniquely refer to the
+   * sign-in request. */
   requestId?: string
-
-  /**RFC 3986 URI referring to the resource that is the subject of the signing (as in the __subject__ of a claim). */
-  resources?: string[]
+  /**List of information or references to information the user wishes to have
+   * resolved as part of authentication by the relying party. They are
+   * expressed as RFC 3986 URIs separated by `\n- `. */
+  resources?: Array<string>
 }

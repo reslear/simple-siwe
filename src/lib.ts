@@ -64,13 +64,15 @@ export function prepareMessage(message: SiweMessage) {
     message.expirationTime ? `Expiration Time: ${message.expirationTime}` : '',
     message.notBefore ? `Not Before: ${message.notBefore}` : '',
     message.requestId ? `Request ID: ${message.requestId}` : '',
-    message.resources ? `Resources:\n${message.resources.join('\n')}` : '',
+    message.resources?.length
+      ? `Resources:\n- ${message.resources.join('\n- ')}`
+      : '',
   ]
     .filter(Boolean)
     .join('\n')
 
   // Combine header, statement, and body
-  const result = `${header}${address}${statement}${body}`
+  const result = header + address + statement + body
 
   return result
 }
