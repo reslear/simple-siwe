@@ -18,6 +18,10 @@ describe('verify message', () => {
     chainId: 1,
     nonce: '123',
     issuedAt: '2024-04-19T00:46:43Z',
+    expirationTime: '2024-04-20T00:46:43Z',
+    notBefore: '2024-04-18T00:46:43Z',
+    requestId: '123',
+    resources: ['https://example.com/resource'],
   }
 
   const account = privateKeyToAccount(
@@ -69,27 +73,37 @@ describe('prepare message', () => {
   it('should prepare a message with a statement', () => {
     const data = {
       domain: 'example.com',
-      address: zeroAddress,
+      address: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
       uri: 'https://example.com',
       version: '1',
-      nonce: '123',
+      nonce: 'a6041978-a319-4c2f-8096-abfb99635740',
       issuedAt: '2024-04-19T00:46:43Z',
       statement: 'I accept the Terms of Service: https://example.com/tos ',
+      resources: ['https://example.com/resource'],
+      requestId: '123',
+      chainId: 1,
+      expirationTime: '2024-04-20T00:46:43Z',
+      notBefore: '2024-04-18T00:46:43Z',
     } as SiweMessage
 
     const message = prepareMessage(data)
 
     expect(message).toMatchInlineSnapshot(
-      `"${data.domain} wants you to sign in with your Ethereum account:
-${data.address}
+      `"example.com wants you to sign in with your Ethereum account:
+0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266
 
-${data.statement}
+I accept the Terms of Service: https://example.com/tos 
 
-URI: ${data.uri}
-Version: ${data.version}
+URI: https://example.com
+Version: 1
 Chain ID: 1
-Nonce: ${data.nonce}
-Issued At: ${data.issuedAt}"`
+Nonce: a6041978-a319-4c2f-8096-abfb99635740
+Issued At: 2024-04-19T00:46:43Z
+Expiration Time: 2024-04-20T00:46:43Z
+Not Before: 2024-04-18T00:46:43Z
+Request ID: 123
+Resources:
+- https://example.com/resource"`
     )
   })
 
@@ -112,8 +126,6 @@ Issued At: ${data.issuedAt}"`
     expect(message2).toMatchInlineSnapshot(
       `"${data2.domain} wants you to sign in with your Ethereum account:
 ${data2.address}
-
-Login to ${data2.domain}
 
 URI: ${data2.uri}
 Version: ${data2.version}
