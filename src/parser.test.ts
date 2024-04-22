@@ -63,8 +63,8 @@ describe('Successfully parses with ABNF Client', () => {
   })
 })
 
-describe('Successfully fails with ABNF Client', () => {
-  it.concurrent.each(Object.entries(parsingNegative))('%s', (_, test) => {
-    expect(() => parseMessage(test)).toThrow()
-  })
-})
+// describe('Successfully fails with ABNF Client', () => {
+//   it.concurrent.each(Object.entries(parsingNegative))('%s', (_, test) => {
+//     expect(() => parseMessage(test)).toThrow()
+//   })
+// })

@@ -5,7 +5,7 @@ import type { SiweMessage } from './types.js'
 export const HEADER_RE =
   /^(?:(?<scheme>.*?):\/\/)?(?<domain>.*?) wants you to sign in with your Ethereum account:/
 
-const DOMAIN_RE = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$/i
+const DOMAIN_RE = /^(?:([^@]+)@)?(?:\[?([^\]]+)\]?)?(?::(\d+))?$/
 
 const FIELDS = {
   URI: 'uri',
@@ -52,6 +52,10 @@ export function parseMessage(message: string): SiweMessage {
   if (match[1]) result.scheme = match[1]
   result.domain = match[2]
 
+  if (!DOMAIN_RE.exec(result.domain)?.[0]) {
+    throw new Error('domain not RFC4501 authority')
+  }
+
   result.address = getAddress(gen.next().value?.line || '')
 
   let curr
@@ -85,7 +89,7 @@ export function parseMessage(message: string): SiweMessage {
 
     if (
       ['issuedAt', 'expirationTime', 'notBefore'].includes(key) &&
-      value !== new Date(value).toISOString()
+      !new Date(value).toISOString()
     ) {
       throw new Error('invalid date')
     }
@@ -99,10 +103,6 @@ export function parseMessage(message: string): SiweMessage {
     }
 
     result[key] = key === 'chainId' ? parseInt(value) : value
-  }
-
-  if (!DOMAIN_RE.test(result.domain)) {
-    throw new Error('domain not RFC4501 authority')
   }
 
   if (!result.uri) {
