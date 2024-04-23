@@ -8,6 +8,7 @@ test('exports', () => {
       "verify",
       "prepareMessage",
       "generateNonce",
+      "parseMessage",
     ]
   `)
 })

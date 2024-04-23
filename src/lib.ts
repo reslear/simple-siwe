@@ -5,9 +5,10 @@ import {
   isAddress,
   InvalidAddressError,
 } from 'viem'
-import type { Address, Hex } from 'viem'
+import type { Hex } from 'viem'
 import type { SiweMessage } from './types.js'
 import { generateNonce } from './utils.js'
+import { parseMessage } from './parser.js'
 
 /**
  * Verifies the integrity of a message using a signature.
@@ -19,17 +20,20 @@ export async function verify({
   message,
   signature,
 }: {
-  message: SiweMessage
+  message: SiweMessage | string
   signature: string | Hex
 }) {
-  const preparedMessage = prepareMessage(message)
+  const preparedMessage =
+    typeof message === 'string' ? message : prepareMessage(message)
 
-  if (!isAddress(message.address)) {
-    throw new InvalidAddressError({ address: message.address })
+  const { address } = parseMessage(preparedMessage)
+
+  if (!isAddress(address)) {
+    throw new InvalidAddressError({ address })
   }
 
   if (!isHex(signature)) {
-    throw new Error('Signature must be a hex string')
+    throw new Error('Signature must be a Hex string')
   }
 
   const recoveredAddress = await recoverMessageAddress({
@@ -37,7 +41,7 @@ export async function verify({
     signature,
   })
 
-  return isAddressEqual(recoveredAddress, message.address)
+  return isAddressEqual(recoveredAddress, address)
 }
 
 /**
