@@ -18,7 +18,7 @@ Simple implementation Sign-In with Ethereum (SIWE) [eip-4361](https://eips.ether
 
 ### Comparison
 
-| Package                                                          | Install size                                                                                                                               | Linting | Engine   | Parser                |
+| Package                                                          | Install size                                                                                                                               | Linting | Engine   | Message parser                |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------- | -------- | --------------------- |
 | [**simple-siwe**](https://github.com/reslear/simple-siwe) v0.1.4 | [![install size](https://packagephobia.com/badge?p=simple-siwe)](https://packagephobia.com/result?p=simple-siwe)                           | average | Viem v2  | own (beta)            |
 | [eip-login](https://github.com/softwarecurator/eip-login) v0.1.0 | [![install size](https://packagephobia.com/badge?p=eip-login)](https://packagephobia.com/result?p=eip-login)                               | average | Viem v2  | -                     |
