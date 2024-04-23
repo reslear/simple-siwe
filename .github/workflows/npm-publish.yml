@@ -6,8 +6,11 @@ on:
      - v*
     branches:
       - main
+    paths-ignore:
+      - '**/README.md'
+      - '.github/*.yml'
   workflow_dispatch:
-
+      
 permissions:
   id-token: write
   contents: write
