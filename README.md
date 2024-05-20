@@ -1,3 +1,5 @@
+> Archived because https://github.com/wevm/viem/pull/2280
+
 # simple-siwe
 
 [![Version](https://img.shields.io/npm/v/simple-siwe)](https://www.npmjs.com/simple-siwe)
